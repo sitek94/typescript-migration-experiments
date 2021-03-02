@@ -1,0 +1,15 @@
+{
+  "name": "typescript-migration-experiments",
+  "version": "1.0.0",
+  "description": "Based on [Practical TypeScript Migration](https://app.pluralsight.com/library/courses/typescript-practical-migration/table-of-contents) by Steve Ognibene on Pluralsight.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.2.2"
+  }
+}
