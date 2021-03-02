@@ -1,5 +1,4 @@
-﻿var app, coins, GameClock, CoinCounterViewModel;
-
+﻿var coins, GameClock, CoinCounterViewModel;
 
 coins = [
     { name: "Penny", style: "penny", value: Big('0.01'), imgSrc: "penny.png", count: ko.observable(0), max: ko.observable(10) },
@@ -51,22 +50,6 @@ GameClock = function (initialTimeInSeconds, callbackOnClockElapsed) {
     self.addSeconds = function (numberOfSeconds) {
         this.secondsRemaining(this.secondsRemaining() + numberOfSeconds);
     };
-};
-
-app = {
-    imagePath: "./img",
-    pointsForCorrect: 10,
-    pointsForIncorrect: 5,
-    msTimeoutAfterCorrect: 1500,
-    msTimeoutAfterIncorrect: 1000,
-    gameLengthInSeconds: 20,
-    bonusSecondsForCorrectPerCoin: 1,
-    maxHighScoreItems: 3,
-    starterHighScoreList: [
-        { name: "Alice", score: 29 },
-        { name: "Bob", score: 19 },
-        { name: "Charlie", score: 9 }
-    ]
 };
 
 CoinCounterViewModel = function () {
