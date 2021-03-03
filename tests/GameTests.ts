@@ -21,7 +21,7 @@
 
     QUnit.test("Can create CoinCounter View Model and defaults are as expected", function (assert) {
 
-        var ccvm = new CoinCounterViewModel(),
+        var ccvm = new CoinCounter.CoinCounterViewModel(),
             hsl = ccvm.highScoreList();
 
         assert.ok(!!ccvm, "expected CoinCounterViewModel variable to be instantiated.");
@@ -34,8 +34,8 @@
 
     QUnit.test("Can add and remove a coin to DOM", function (assert) {
 
-        var ccvm = new CoinCounterViewModel(),
-            coin = coins[0],
+        var ccvm = new CoinCounter.CoinCounterViewModel(),
+            coin = CoinCounter.coins[0],
             tempContainer = document.getElementById("tempContainer");
 
         var coinDiv = document.createElement("div");
@@ -51,7 +51,7 @@
     });
 
     QUnit.test("Proper pluralization of goal", function (assert) {
-        var ccvm = new CoinCounterViewModel();
+        var ccvm = new CoinCounter.CoinCounterViewModel();
         ccvm.goalAmount(Big("0.01"));
         assert.strictEqual(ccvm.whatTheUserShouldBeDoing(), "Try to make 1 cent.", "expected singular");
 

@@ -7,25 +7,25 @@
     });
 
     QUnit.test("Can create GameClock with no parameters and defaults are as expected", function (assert) {
-        var gc = new GameClock();
+        var gc = new CoinCounter.GameClock();
         assert.ok(!!gc, "expected GameClock variable to be instantiated.");
         assert.strictEqual(gc.secondsRemaining(), 30, "expected default time remaining.");
         assert.strictEqual(gc.isRunning(), false, "expected GameClock to be stopped.");
     });
 
     QUnit.test("Can create GameClock with time parameter and the time is equal to the time specified", function (assert) {
-        var gc = new GameClock(22);
+        var gc = new CoinCounter.GameClock(22);
         assert.strictEqual(gc.secondsRemaining(), 22, "expected the seconds remaining to be the same as passed to constructor");
     });
 
     QUnit.test("Can add time.", function (assert) {
-        var gc = new GameClock(103);
+        var gc = new CoinCounter.GameClock(103);
         gc.addSeconds(5);
         assert.strictEqual(gc.secondsRemaining(), 108, "expected the seconds to have been added.");
     });
 
     QUnit.test("Can start and stop.", function (assert) {
-        var gc = new GameClock(101);
+        var gc = new CoinCounter.GameClock(101);
         gc.start();
         assert.strictEqual(gc.isRunning(), true, "expected the GameClock to be running.");
         gc.stop();
@@ -38,7 +38,7 @@
             secondsToRun = 1,
             startSeconds = 75;
 
-        var gc = new GameClock(startSeconds);
+        var gc = new CoinCounter.GameClock(startSeconds);
         gc.start();
 
         setTimeout(function () {
@@ -68,7 +68,7 @@
                 assert.ok(true, "expected this callback to be executed when GameClock elapsed.");
             };
 
-        var gc = new GameClock(startSeconds,callback);
+        var gc = new CoinCounter.GameClock(startSeconds,callback);
         gc.start();
 
         setTimeout(function () {

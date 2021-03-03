@@ -1,4 +1,8 @@
 "use strict";
-function spacesToUnderscore(inputString) {
-    return inputString.replace(/ /g, '_');
-}
+var CoinCounter;
+(function (CoinCounter) {
+    function spacesToUnderscore(inputString) {
+        return inputString.replace(/ /g, '_');
+    }
+    CoinCounter.spacesToUnderscore = spacesToUnderscore;
+})(CoinCounter || (CoinCounter = {}));
