@@ -5,6 +5,8 @@ module CoinCounter {
     public max: KnockoutObservable<number>;
     public addCoinEnabled?: KnockoutComputed<boolean>;
     public removeCoinEnabled?: KnockoutComputed<boolean>;
+    public canTakeAway: KnockoutComputed<boolean>;
+    public canAddMore: KnockoutComputed<boolean>;
 
     constructor(
       public name: string,
@@ -15,6 +17,12 @@ module CoinCounter {
       this.imgSrc = style + '.png';
       this.count = ko.observable(0);
       this.max = ko.observable(max);
+      this.canTakeAway = ko.computed(() => {
+        return this.count() > 0;
+      });
+      this.canAddMore = ko.computed(() => {
+        return this.count() < this.max();
+      });
     }
   }
 

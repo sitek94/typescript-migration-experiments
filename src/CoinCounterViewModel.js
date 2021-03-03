@@ -255,21 +255,14 @@ var CoinCounter;
                 window.location.href = 'tests/tests.html';
             }
         };
+        CoinCounterViewModel.prototype.addCoinEnabled = function (coin) {
+            return this.buttonsEnabled() && coin.canAddMore();
+        };
+        CoinCounterViewModel.prototype.removeCoinEnabled = function (coin) {
+            return this.buttonsEnabled() && coin.canTakeAway();
+        };
         CoinCounterViewModel.prototype.initialize = function () {
             var _this = this;
-            // add computeds to coins (which reference vm)
-            (function () {
-                for (var i = 0; i < CoinCounter.coins.length; i += 1) {
-                    (function (coin) {
-                        coin.addCoinEnabled = ko.computed(function () {
-                            return _this.buttonsEnabled() && coin.count() < coin.max();
-                        });
-                        coin.removeCoinEnabled = ko.computed(function () {
-                            return _this.buttonsEnabled() && coin.count() > 0;
-                        });
-                    })(CoinCounter.coins[i]);
-                }
-            })();
             $('#nameModal')
                 .on('shown.bs.modal', function () {
                 setTimeout(function () {

@@ -67,11 +67,11 @@
           <div class="col-md-2 unselectable">
             <button
               class="btn btn-lg btn-coin glyphicon glyphicon-minus"
-              data-bind="click: $parent.removeCoin, enable: removeCoinEnabled()"
+              data-bind="click: $parent.removeCoin, enable: $parent.removeCoinEnabled($data)"
             ></button>
             <button
               class="btn btn-lg btn-coin glyphicon glyphicon-plus"
-              data-bind="click: $parent.addCoin, enable: addCoinEnabled()"
+              data-bind="click: $parent.addCoin, enable: $parent.addCoinEnabled($data)"
             ></button>
           </div>
           <div class="col-md-1">

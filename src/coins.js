@@ -3,6 +3,7 @@ var CoinCounter;
 (function (CoinCounter) {
     var Coin = /** @class */ (function () {
         function Coin(name, style, value, max) {
+            var _this = this;
             if (max === void 0) { max = 10; }
             this.name = name;
             this.style = style;
@@ -10,6 +11,12 @@ var CoinCounter;
             this.imgSrc = style + '.png';
             this.count = ko.observable(0);
             this.max = ko.observable(max);
+            this.canTakeAway = ko.computed(function () {
+                return _this.count() > 0;
+            });
+            this.canAddMore = ko.computed(function () {
+                return _this.count() < _this.max();
+            });
         }
         return Coin;
     }());

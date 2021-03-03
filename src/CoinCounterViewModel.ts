@@ -304,21 +304,15 @@
       return 'New Game';
     });
 
-    initialize() {
-      // add computeds to coins (which reference vm)
-      (() => {
-        for (var i = 0; i < coins.length; i += 1) {
-          (coin => {
-            coin.addCoinEnabled = ko.computed(() => {
-              return this.buttonsEnabled() && coin.count() < coin.max();
-            });
-            coin.removeCoinEnabled = ko.computed(() => {
-              return this.buttonsEnabled() && coin.count() > 0;
-            });
-          })(coins[i]);
-        }
-      })();
+    addCoinEnabled(coin: Coin) {
+      return this.buttonsEnabled() && coin.canAddMore();
+    }
 
+    removeCoinEnabled(coin: Coin) {
+      return this.buttonsEnabled() && coin.canTakeAway();
+    }
+
+    initialize() {
       $('#nameModal')
         .on('shown.bs.modal', () => {
           setTimeout(() => {
