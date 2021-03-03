@@ -1,5 +1,5 @@
-﻿var CoinCounterViewModel;
-
+"use strict";
+var CoinCounterViewModel;
 CoinCounterViewModel = function () {
     "use strict";
     var self = this;
@@ -132,7 +132,8 @@ CoinCounterViewModel = function () {
                 self.startNewGame();
             });
             $("#splash").addClass("correct");
-        } else {
+        }
+        else {
             this.score(this.score() - app.pointsForIncorrect);
             message = "Incorrect.<br />-" + app.pointsForIncorrect + " points.";
             this.showStatusMessage(message, app.msTimeoutAfterIncorrect, function () {
@@ -170,7 +171,7 @@ CoinCounterViewModel = function () {
         this.statusMessageVisible(false);
     };
     self.clearCoins = function () {
-        for (var coinIndex = 0 ; coinIndex < coins.length; coinIndex += 1) {
+        for (var coinIndex = 0; coinIndex < coins.length; coinIndex += 1) {
             var coin = coins[coinIndex];
             coin.count(0);
             var div = document.getElementById("draw" + spacesToUnderscore(coin.name));
@@ -233,7 +234,6 @@ CoinCounterViewModel = function () {
         return "New Game";
     });
     self.initialize = function () {
-
         // add computeds to coins (which reference vm)
         (function () {
             for (var i = 0; i < coins.length; i += 1) {
@@ -247,19 +247,18 @@ CoinCounterViewModel = function () {
                 })(coins[i]);
             }
         })();
-
         $('#nameModal')
             .on('shown.bs.modal', function () {
-                setTimeout(function () {
-                    $("#playerNameInput").focus();
-                }, 100);
-            })
+            setTimeout(function () {
+                $("#playerNameInput").focus();
+            }, 100);
+        })
             .on('hidden.bs.modal', function () {
-                self.startNewGame();
-                self.score(0);
-                self.gameClock.reset();
-                self.gameClock.start();
-            });
+            self.startNewGame();
+            self.score(0);
+            self.gameClock.reset();
+            self.gameClock.start();
+        });
         $('#playerNameInput').bind('keypress', function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
@@ -269,8 +268,6 @@ CoinCounterViewModel = function () {
         self.startBrandNewGame();
     };
 };
-
 function spacesToUnderscore(inputString) {
     return inputString.replace(/ /g, '_');
 }
-
