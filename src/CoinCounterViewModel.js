@@ -4,8 +4,8 @@ var CoinCounter;
     var CoinCounterViewModel = /** @class */ (function () {
         function CoinCounterViewModel() {
             var _this = this;
-            this.highScoreList = ko.observableArray(CoinCounter.app.starterHighScoreList);
-            this.gameClock = new CoinCounter.GameClock(CoinCounter.app.gameLengthInSeconds, this.handleGameClockElapsed);
+            this.highScoreList = new CoinCounter.HighScoreList();
+            this.gameClock = new CoinCounter.GameClock(CoinCounter.app.gameLengthInSeconds, this.handleGameClockElapsed.bind(this));
             this.statusMessage = ko.observable('');
             this.statusMessageVisible = ko.observable(false);
             this.isPaused = ko.computed(function () {
@@ -64,7 +64,7 @@ var CoinCounter;
             });
         }
         CoinCounterViewModel.prototype.handleGameClockElapsed = function () {
-            var highScoreIndex = this.tryPushHighScore({
+            var highScoreIndex = this.highScoreList.tryPushHighScore({
                 name: this.playerName(),
                 score: this.score(),
             });
@@ -80,30 +80,6 @@ var CoinCounter;
             }
             this.endOfGameMessage(message);
             $('#gameOverModal').modal('show');
-        };
-        CoinCounterViewModel.prototype.tryPushHighScore = function (theScore) {
-            var hsl = this.highScoreList();
-            if (theScore.score === 0) {
-                return -1;
-            }
-            if (!theScore.name) {
-                theScore.name = 'No name';
-            }
-            if (hsl.length === 0) {
-                this.highScoreList.push(theScore);
-                return 0;
-            }
-            for (var i = 0; i < this.highScoreList().length; i += 1) {
-                if (hsl[i].score < theScore.score) {
-                    hsl.splice(i, 0, theScore);
-                    if (hsl.length > CoinCounter.app.maxHighScoreItems) {
-                        hsl.length = CoinCounter.app.maxHighScoreItems;
-                    }
-                    this.highScoreList(hsl);
-                    return i;
-                }
-            }
-            return -1;
         };
         CoinCounterViewModel.prototype.pauseGame = function () {
             this.gameClock.stop();

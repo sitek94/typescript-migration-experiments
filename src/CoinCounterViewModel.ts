@@ -1,12 +1,9 @@
 ﻿module CoinCounter {
-  interface HighScoreItem {
-    score: number;
-    name: string;
-  }
-
   export class CoinCounterViewModel {
+    public highScoreList = new HighScoreList()
+
     handleGameClockElapsed() {
-      var highScoreIndex = this.tryPushHighScore({
+      var highScoreIndex = this.highScoreList.tryPushHighScore({
         name: this.playerName(),
         score: this.score(),
       });
@@ -23,36 +20,9 @@
       $('#gameOverModal').modal('show');
     }
 
-    public highScoreList = ko.observableArray(app.starterHighScoreList);
-
-    tryPushHighScore(theScore: HighScoreItem) {
-      var hsl = this.highScoreList();
-      if (theScore.score === 0) {
-        return -1;
-      }
-      if (!theScore.name) {
-        theScore.name = 'No name';
-      }
-      if (hsl.length === 0) {
-        this.highScoreList.push(theScore);
-        return 0;
-      }
-      for (var i = 0; i < this.highScoreList().length; i += 1) {
-        if (hsl[i].score < theScore.score) {
-          hsl.splice(i, 0, theScore);
-          if (hsl.length > app.maxHighScoreItems) {
-            hsl.length = app.maxHighScoreItems;
-          }
-          this.highScoreList(hsl);
-          return i;
-        }
-      }
-      return -1;
-    }
-
     public gameClock = new GameClock(
       app.gameLengthInSeconds,
-      this.handleGameClockElapsed,
+      this.handleGameClockElapsed.bind(this),
     );
     pauseGame() {
       this.gameClock.stop();

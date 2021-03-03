@@ -19,9 +19,10 @@ if (QUnit) {
         assert.ok(1 === 1, "Tests are running.");
     });
     QUnit.test("Can create CoinCounter View Model and defaults are as expected", function (assert) {
-        var ccvm = new CoinCounter.CoinCounterViewModel(), hsl = ccvm.highScoreList();
+        var ccvm = new CoinCounter.CoinCounterViewModel(), hsl = ccvm.highScoreList;
         assert.ok(!!ccvm, "expected CoinCounterViewModel variable to be instantiated.");
-        assert.ok(hsl.length > 0 && hsl.constructor === Array, "expected a high score array");
+        assert.ok(hsl.List().length > 0, "expected a non-empty array");
+        assert.ok(hsl instanceof CoinCounter.HighScoreList, "expected a HighScoreList");
         assert.ok(!!ccvm.gameClock, "expected an instantiated game clock");
         assert.ok(!!ccvm.coins, "expected instantiated coins");
         assert.ok(!!ccvm.app, "expected an instantiated app");

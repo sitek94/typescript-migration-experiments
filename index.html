@@ -178,7 +178,7 @@
                 <td>Score</td>
               </tr>
             </thead>
-            <tbody data-bind="foreach: highScoreList">
+            <tbody data-bind="foreach: highScoreList.List">
               <tr>
                 <td data-bind="text: ($index() + 1)"></td>
                 <td data-bind="text: name"></td>
@@ -209,6 +209,7 @@
     <script src="src/coins.js"></script>
     <script src="src/globals.js"></script>
     <script src="src/gameclock.js"></script>
+    <script src="src/HighScore.js"></script>
     <script src="src/CoinCounterViewModel.js"></script>
     <script src="src/index.js"></script>
   </body>
