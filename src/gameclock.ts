@@ -1,6 +1,6 @@
-var GameClock = function (initialTimeInSeconds: number, callbackOnClockElapsed: () => void) {
+var GameClock = function (this: any, initialTimeInSeconds: number, callbackOnClockElapsed: () => void) {
   "use strict";
-  var self: any = this;
+  var self = this;
   var _initialTimeInSeconds = initialTimeInSeconds || 30;
   var _callbackOnClockElapsed = callbackOnClockElapsed;
   var intervalHandle: number;
