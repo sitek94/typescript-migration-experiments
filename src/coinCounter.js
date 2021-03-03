@@ -1,11 +1,4 @@
-﻿var coins, CoinCounterViewModel;
-
-coins = [
-    { name: "Penny", style: "penny", value: Big('0.01'), imgSrc: "penny.png", count: ko.observable(0), max: ko.observable(10) },
-    { name: "Nickel", style: "nickel", value: Big('0.05'), imgSrc: "nickel.png", count: ko.observable(0), max: ko.observable(10) },
-    { name: "Dime", style: "dime", value: Big('0.10'), imgSrc: "dime.png", count: ko.observable(0), max: ko.observable(10) },
-    { name: "Quarter", style: "quarter", value: Big('0.25'), imgSrc: "quarter.png", count: ko.observable(0), max: ko.observable(4) }
-];
+﻿var CoinCounterViewModel;
 
 CoinCounterViewModel = function () {
     "use strict";
