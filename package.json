@@ -11,6 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/big.js": "0.0.30",
+    "@types/bootstrap": "^3.3.28",
+    "@types/jquery": "^3.5.5",
     "@types/knockout": "^3.4.69",
     "@types/qunit": "^2.11.1",
     "qunitjs": "^2.4.1",
