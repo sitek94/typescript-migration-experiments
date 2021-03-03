@@ -114,7 +114,7 @@
     }
 
     destinationDivIDForCoin(coin: Coin) {
-      return 'draw' + spacesToUnderscore(coin.name);
+      return 'draw' + CoinCounter.spacesToUnderscore(coin.name);
     }
 
     removeCoin(coin: Coin) {
