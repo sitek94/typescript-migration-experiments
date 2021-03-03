@@ -1,6 +1,17 @@
-var GameClock = function (this: any, initialTimeInSeconds: number, callbackOnClockElapsed: () => void) {
+interface GameClock {
+  new (initialTimeInSeconds?: number, callbackOnClockElapsed?: () => void): GameClock;
+  start(): void;
+  stop(): void;
+  reset(): void;
+  addSeconds(seconds: number): void;
+  isRunning: KnockoutObservable<boolean>;
+  secondsRemaining: KnockoutObservable<number>;
+  timeRemainingFormatted: KnockoutComputed<string>;
+}
+
+var GameClock: GameClock = <ClassFunction>function (this: any, initialTimeInSeconds?: number, callbackOnClockElapsed?: () => void) {
   "use strict";
-  var self = this;
+  var self: GameClock = this;
   var _initialTimeInSeconds = initialTimeInSeconds || 30;
   var _callbackOnClockElapsed = callbackOnClockElapsed;
   var intervalHandle: number;
