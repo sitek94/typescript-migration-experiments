@@ -3,15 +3,13 @@
   name: string;
 }
 
-var CoinCounterViewModel = function (this: any) {
-  'use strict';
-  var self = this;
-  self.handleGameClockElapsed = function () {
-    var highScoreIndex = self.tryPushHighScore({
-      name: self.playerName(),
-      score: self.score(),
+class CoinCounterViewModel {
+  handleGameClockElapsed() {
+    var highScoreIndex = this.tryPushHighScore({
+      name: this.playerName(),
+      score: this.score(),
     });
-    var message = 'Your score was ' + self.score() + '.';
+    var message = 'Your score was ' + this.score() + '.';
     if (highScoreIndex === 0) {
       message += "<br />That's the high score!";
     } else if (highScoreIndex !== -1) {
@@ -20,12 +18,14 @@ var CoinCounterViewModel = function (this: any) {
         (highScoreIndex + 1) +
         ' on the high score list!';
     }
-    self.endOfGameMessage(message);
+    this.endOfGameMessage(message);
     $('#gameOverModal').modal('show');
-  };
-  self.highScoreList = ko.observableArray(app.starterHighScoreList);
-  self.tryPushHighScore = function (theScore: HighScoreItem) {
-    var hsl = self.highScoreList();
+  }
+
+  public highScoreList = ko.observableArray(app.starterHighScoreList);
+
+  tryPushHighScore(theScore: HighScoreItem) {
+    var hsl = this.highScoreList();
     if (theScore.score === 0) {
       return -1;
     }
@@ -33,64 +33,70 @@ var CoinCounterViewModel = function (this: any) {
       theScore.name = 'No name';
     }
     if (hsl.length === 0) {
-      self.highScoreList.push(theScore);
+      this.highScoreList.push(theScore);
       return 0;
     }
-    for (var i = 0; i < self.highScoreList().length; i += 1) {
+    for (var i = 0; i < this.highScoreList().length; i += 1) {
       if (hsl[i].score < theScore.score) {
         hsl.splice(i, 0, theScore);
         if (hsl.length > app.maxHighScoreItems) {
           hsl.length = app.maxHighScoreItems;
         }
-        self.highScoreList(hsl);
+        this.highScoreList(hsl);
         return i;
       }
     }
     return -1;
-  };
-  self.gameClock = new GameClock(
+  }
+
+  public gameClock = new GameClock(
     app.gameLengthInSeconds,
-    self.handleGameClockElapsed,
+    this.handleGameClockElapsed,
   );
-  self.pauseGame = function () {
-    self.gameClock.stop();
-  };
-  self.resumeGame = function () {
-    self.gameClock.start();
-  };
-  self.statusMessage = ko.observable('');
-  self.statusMessageVisible = ko.observable(false);
-  self.isPaused = ko.computed(function () {
+  pauseGame() {
+    this.gameClock.stop();
+  }
+
+  resumeGame() {
+    this.gameClock.start();
+  }
+
+  public statusMessage = ko.observable('');
+  public statusMessageVisible = ko.observable(false);
+  public isPaused = ko.computed(() => {
     return (
-      !self.gameClock.isRunning() &&
-      self.gameClock.secondsRemaining() > 0 &&
-      !self.statusMessageVisible()
+      !this.gameClock.isRunning() &&
+      this.gameClock.secondsRemaining() > 0 &&
+      !this.statusMessageVisible()
     );
   });
-  self.canBePaused = ko.computed(function () {
+  public canBePaused = ko.computed(() => {
     return (
-      self.gameClock.isRunning() &&
-      self.gameClock.secondsRemaining() > 0 &&
-      !self.statusMessageVisible()
+      this.gameClock.isRunning() &&
+      this.gameClock.secondsRemaining() > 0 &&
+      !this.statusMessageVisible()
     );
   });
-  self.playerName = ko.observable('');
-  self.playerNameQuestion = ko.observable('');
-  self.coins = coins;
-  self.app = app;
-  self.score = ko.observable(0);
-  self.scoreText = ko.computed(function () {
-    return self.playerName() === ''
-      ? 'Score: ' + self.score()
-      : self.playerName() + "'s score: " + self.score();
+  public playerName = ko.observable('');
+  public playerNameQuestion = ko.observable('');
+  public coins = coins;
+  public app = app;
+  public score = ko.observable(0);
+  public scoreText = ko.computed(() => {
+    return this.playerName() === ''
+      ? 'Score: ' + this.score()
+      : this.playerName() + "'s score: " + this.score();
   });
-  self.imageElementName = function (coinName: string, zeroBasedIndex: number) {
+
+  imageElementName(coinName: string, zeroBasedIndex: number) {
     return 'img' + spacesToUnderscore(coinName) + String(zeroBasedIndex);
-  };
-  self.buttonsEnabled = ko.computed(function () {
-    return !self.isPaused() && self.gameClock.isRunning();
+  }
+
+  public buttonsEnabled = ko.computed(() => {
+    return !this.isPaused() && this.gameClock.isRunning();
   });
-  self.addCoin = function (coin: Coin) {
+
+  addCoin(coin: Coin) {
     if (coin.count() === coin.max()) {
       return;
     }
@@ -98,30 +104,34 @@ var CoinCounterViewModel = function (this: any) {
     coin.count(coin.count() + 1);
     var newCoin = document.createElement('img');
     newCoin.src = app.imagePath + '/' + coin.imgSrc;
-    newCoin.id = self.imageElementName(coin.name, oldCoinCount);
+    newCoin.id = this.imageElementName(coin.name, oldCoinCount);
     newCoin.classList.add(coin.style);
     var destinationDiv = document.getElementById(
-      self.destinationDivIDForCoin(coin),
+      this.destinationDivIDForCoin(coin),
     );
     destinationDiv?.appendChild(newCoin);
-  };
-  self.destinationDivIDForCoin = function (coin: Coin) {
+  }
+
+  destinationDivIDForCoin(coin: Coin) {
     return 'draw' + spacesToUnderscore(coin.name);
-  };
-  self.removeCoin = function (coin: Coin) {
+  }
+
+  removeCoin(coin: Coin) {
     if (coin.count() === 0) {
       return;
     }
     coin.count(coin.count() - 1);
     var coinToRemove = document.getElementById(
-      self.imageElementName(coin.name, coin.count()),
+      this.imageElementName(coin.name, coin.count()),
     );
     coinToRemove?.parentNode?.removeChild(coinToRemove);
-  };
-  self.goalAmount = ko.observable(null);
-  self.whatTheUserShouldBeDoing = function () {
-    if (self && self.goalAmount) {
-      var ga = self.goalAmount();
+  }
+
+  public goalAmount = ko.observable(null);
+
+  whatTheUserShouldBeDoing() {
+    if (this && this.goalAmount) {
+      var ga = this.goalAmount();
       if (ga !== null && ga.toFixed) {
         return (
           'Try to make ' +
@@ -133,15 +143,17 @@ var CoinCounterViewModel = function (this: any) {
       }
     }
     return '';
-  };
-  self.calculateTotal = function () {
+  }
+
+  calculateTotal() {
     var total = Big(0);
     this.coins.forEach(function (coin: Coin) {
       total = total.plus(coin.value.times(coin.count()));
     });
     return total;
-  };
-  self.checkForVictory = function () {
+  }
+
+  checkForVictory() {
     var message;
     if (this.calculateTotal().eq(this.goalAmount())) {
       this.gameClock.stop();
@@ -161,53 +173,58 @@ var CoinCounterViewModel = function (this: any) {
         ' points, +' +
         bonusSeconds +
         ' sec for coins used.';
-      this.showStatusMessage(message, app.msTimeoutAfterCorrect, function () {
+      this.showStatusMessage(message, app.msTimeoutAfterCorrect, () => {
         $('#splash').removeClass('correct');
-        self.startNewGame();
+        this.startNewGame();
       });
       $('#splash').addClass('correct');
     } else {
       this.score(this.score() - app.pointsForIncorrect);
       message = 'Incorrect.<br />-' + app.pointsForIncorrect + ' points.';
-      this.showStatusMessage(message, app.msTimeoutAfterIncorrect, function () {
+      this.showStatusMessage(message, app.msTimeoutAfterIncorrect, () => {
         $('#splash').removeClass('flyIn');
       });
       $('#splash').addClass('flyIn');
     }
-  };
-  self.startNewGame = function () {
-    self.clearStatusMessage();
-    self.clearCoins();
+  }
+
+  startNewGame() {
+    this.clearStatusMessage();
+    this.clearCoins();
     var goalAmount = Math.floor(Math.random() * 100 + 1) / 100;
-    self.goalAmount(Big(goalAmount.toFixed(2)));
-    self.gameClock.start();
-  };
-  self.startBrandNewGame = function () {
-    self.visiblePage('game');
-    self.playerNameQuestion('Enter player name:');
+    this.goalAmount(Big(goalAmount.toFixed(2)));
+    this.gameClock.start();
+  }
+
+  startBrandNewGame() {
+    this.visiblePage('game');
+    this.playerNameQuestion('Enter player name:');
     $('#gameOverModal').modal('hide');
     $('#nameModal').modal('show');
-  };
-  self.showStatusMessage = function (
+  }
+
+  showStatusMessage(
     message: string,
     timeout: number,
-    callback: (viewModel: typeof self) => void,
+    callback: (viewModel: CoinCounterViewModel) => void,
   ) {
     this.statusMessage(message);
     this.statusMessageVisible(true);
-    var self = this;
-    setTimeout(function () {
-      self.clearStatusMessage();
+
+    setTimeout(() => {
+      this.clearStatusMessage();
       if (callback) {
-        callback(self);
+        callback(this);
       }
     }, timeout);
-  };
-  self.clearStatusMessage = function () {
+  }
+
+  clearStatusMessage() {
     this.statusMessage('');
     this.statusMessageVisible(false);
-  };
-  self.clearCoins = function () {
+  }
+
+  clearCoins() {
     for (var coinIndex = 0; coinIndex < coins.length; coinIndex += 1) {
       var coin = coins[coinIndex];
       coin.count(0);
@@ -216,48 +233,58 @@ var CoinCounterViewModel = function (this: any) {
         div.removeChild(div.lastChild);
       }
     }
-  };
-  self.endOfGameVisible = ko.observable(false);
-  self.endOfGameMessage = ko.observable('');
-  self.visiblePage = ko.observable('game');
-  self.gameVisible = ko.computed(function () {
-    return self.visiblePage() === 'game';
+  }
+
+  public endOfGameVisible = ko.observable(false);
+  public endOfGameMessage = ko.observable('');
+  public visiblePage = ko.observable('game');
+
+  public gameVisible = ko.computed(() => {
+    return this.visiblePage() === 'game';
   });
-  self.highScoreVisible = ko.computed(function () {
-    return self.visiblePage() === 'highscore';
+
+  public highScoreVisible = ko.computed(() => {
+    return this.visiblePage() === 'highscore';
   });
-  self.aboutVisible = ko.computed(function () {
-    return self.visiblePage() === 'about';
+
+  public aboutVisible = ko.computed(() => {
+    return this.visiblePage() === 'about';
   });
-  self.setGameVisible = function () {
-    if (self.visiblePage() === 'game') {
-      self.startBrandNewGame();
+
+  setGameVisible() {
+    if (this.visiblePage() === 'game') {
+      this.startBrandNewGame();
     }
-    self.visiblePage('game');
-  };
-  self.setAboutPageVisible = function () {
-    self.pauseGame();
-    self.visiblePage('about');
-  };
-  self.setHighScoreVisible = function () {
-    self.pauseGame();
-    self.visiblePage('highscore');
-  };
-  self.newGameButtonClass = ko.computed(function () {
-    if (self.gameVisible()) {
+    this.visiblePage('game');
+  }
+
+  setAboutPageVisible() {
+    this.pauseGame();
+    this.visiblePage('about');
+  }
+
+  setHighScoreVisible() {
+    this.pauseGame();
+    this.visiblePage('highscore');
+  }
+
+  public newGameButtonClass = ko.computed(() => {
+    if (this.gameVisible()) {
       return 'active';
     }
     return '';
   });
-  self.aboutButtonClass = ko.computed(function () {
-    if (self.aboutVisible()) {
+
+  public aboutButtonClass = ko.computed(() => {
+    if (this.aboutVisible()) {
       return 'active';
     }
     return '';
   });
-  self.unitTestsButtonClick = function () {
-    if (!self.isPaused()) {
-      self.pauseGame();
+
+  unitTestsButtonClick() {
+    if (!this.isPaused()) {
+      this.pauseGame();
     }
     var response = confirm(
       'Do you want to run the unit tests?\nThis will cancel any current game and forget your high scores.',
@@ -265,46 +292,48 @@ var CoinCounterViewModel = function (this: any) {
     if (response) {
       window.location.href = 'tests/tests.html';
     }
-  };
-  self.newGameButtonText = ko.computed(function () {
-    if (self.visiblePage() !== 'game') {
+  }
+
+  public newGameButtonText = ko.computed(() => {
+    if (this.visiblePage() !== 'game') {
       return 'Game';
     }
     return 'New Game';
   });
-  self.initialize = function () {
+
+  initialize() {
     // add computeds to coins (which reference vm)
-    (function () {
+    (() => {
       for (var i = 0; i < coins.length; i += 1) {
-        (function (coin) {
-          coin.addCoinEnabled = ko.computed(function () {
-            return self.buttonsEnabled() && coin.count() < coin.max();
+        (coin => {
+          coin.addCoinEnabled = ko.computed(() => {
+            return this.buttonsEnabled() && coin.count() < coin.max();
           });
-          coin.removeCoinEnabled = ko.computed(function () {
-            return self.buttonsEnabled() && coin.count() > 0;
+          coin.removeCoinEnabled = ko.computed(() => {
+            return this.buttonsEnabled() && coin.count() > 0;
           });
         })(coins[i]);
       }
     })();
 
     $('#nameModal')
-      .on('shown.bs.modal', function () {
-        setTimeout(function () {
+      .on('shown.bs.modal', () => {
+        setTimeout(() => {
           $('#playerNameInput').focus();
         }, 100);
       })
-      .on('hidden.bs.modal', function () {
-        self.startNewGame();
-        self.score(0);
-        self.gameClock.reset();
-        self.gameClock.start();
+      .on('hidden.bs.modal', () => {
+        this.startNewGame();
+        this.score(0);
+        this.gameClock.reset();
+        this.gameClock.start();
       });
-    $('#playerNameInput').bind('keypress', function (event) {
+    $('#playerNameInput').bind('keypress', event => {
       if (event.keyCode === 13) {
         event.preventDefault();
         $('#playerNameOK').trigger('click');
       }
     });
-    self.startBrandNewGame();
-  };
-};
+    this.startBrandNewGame();
+  }
+}
